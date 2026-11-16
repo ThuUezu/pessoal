@@ -1,6 +1,6 @@
 # O navegador só fala com este domínio. O Netlify repassa /api/* ao backend no Render (rewrite 200),
 # então o cookie de sessão é "do mesmo site" e o Safari do iPhone não o bloqueia.
 # >>> TROQUE a URL abaixo pelo endereço do seu serviço no Render <<<
-/api/*  https://SEU-SERVICO.onrender.com/api/:splat  200
+/api/*  https://pessoal2.onrender.com/api/:splat  200
 # SPA: qualquer outro caminho abre o app.
 /*      /index.html                                  200
