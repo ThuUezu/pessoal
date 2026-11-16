@@ -1,0 +1,36 @@
+# Netlify: publica este repositório (o frontend). O backend fica em outro repositório, no Render.
+# O proxy de /api/* para o Render está em public/_redirects (troque a URL de lá).
+
+[build]
+  command = "npm run build"
+  publish = "dist"   # pasta gerada pelo Vite
+
+[build.environment]
+  NODE_VERSION = "22"   # o Vite 8 exige Node 20.19+ ou 22.12+ (só no build; o runtime do backend é separado)
+
+# Segurança em todas as páginas.
+# CSP: só o próprio site, o script/frames do login Google, e as imagens/envio da Cloudinary.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data: blob: https://res.cloudinary.com; font-src 'self'; connect-src 'self' https://api.cloudinary.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(self), microphone=(), geolocation=()"
+
+# Arquivos com hash no nome nunca mudam: cache longo.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# O service worker e o index precisam ser sempre revalidados, senão o app não atualiza.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"

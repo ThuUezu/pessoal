@@ -1,0 +1,140 @@
+@import '@fontsource/fraunces/latin-600.css';
+@import '@fontsource/figtree/latin-400.css';
+@import '@fontsource/figtree/latin-500.css';
+@import '@fontsource/figtree/latin-600.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens de cor como "R G B" para o Tailwind aplicar opacidade. Paleta azulada da spec; contraste AA conferido. */
+:root,
+:root[data-theme='light'] {
+  --bg: 238 244 255; /* #eef4ff */
+  --surface: 255 255 255;
+  --sunken: 227 236 251;
+  --ink: 15 27 61;
+  --soft: 74 90 128;
+  --line: 208 220 242;
+  --primary: 37 99 235; /* #2563eb */
+  --primary-strong: 30 64 175; /* #1e40af */
+  --on-primary: 255 255 255;
+  --accent: 207 240 250;
+  --accent-ink: 14 99 124;
+  --success: 22 128 61;
+  --success-soft: 220 252 231;
+  --success-ink: 21 101 52;
+  --warn: 180 83 9;
+  --warn-soft: 254 243 199;
+  --warn-ink: 120 53 15;
+  --danger: 185 28 28; /* texto de erro */
+  --danger-solid: 185 28 28; /* fundo de botão/aviso de erro (texto branco por cima) */
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: 11 18 38;
+  --surface: 19 28 54;
+  --sunken: 27 39 71;
+  --ink: 232 238 252;
+  --soft: 159 176 214;
+  --line: 38 52 92;
+  --primary: 46 104 232;
+  --primary-strong: 143 178 255;
+  --on-primary: 255 255 255;
+  --accent: 22 58 77;
+  --accent-ink: 140 215 238;
+  --success: 21 128 61;
+  --success-soft: 20 58 38;
+  --success-ink: 134 239 172;
+  --warn: 180 83 9;
+  --warn-soft: 62 42 12;
+  --warn-ink: 252 211 120;
+  --danger: 248 113 113;
+  --danger-solid: 185 28 28;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+    font-size: 16px; /* 16px nos campos evita o zoom automático do Safari do iPhone */
+    line-height: 1.5;
+    overscroll-behavior-y: none;
+  }
+  h1,
+  h2 {
+    @apply font-display;
+    font-weight: 600;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+  :focus-visible {
+    outline: 3px solid rgb(var(--primary));
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+  button {
+    touch-action: manipulation;
+  }
+}
+
+@layer components {
+  /* Botões: alvo mínimo de 44px (guia de acessibilidade do iOS). */
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-control px-4 font-semibold transition-colors disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-on-primary active:bg-primary-strong;
+  }
+  .btn-quiet {
+    @apply btn bg-sunken text-ink active:bg-line;
+  }
+  .btn-ghost {
+    @apply btn text-primary-strong active:bg-sunken;
+  }
+  .btn-success {
+    @apply btn bg-success text-on-primary;
+  }
+  .field {
+    @apply min-h-[44px] w-full rounded-control border border-line bg-surface px-3.5 py-2.5 text-ink placeholder:text-soft/80;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-soft;
+  }
+}
+
+/* Áreas seguras do iPhone (notch / barra inferior). */
+.pb-nav {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 72px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* O campo de arquivo fica fora da tela, mas ainda clicável por código (display:none quebra no iOS antigo). */
+.file-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
